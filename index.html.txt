@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Portal Skeleton</title>
+  <style>
+    :root{
+      --bg:#0b0b0e; --panel:rgba(255,255,255,.03); --line:rgba(255,255,255,.10);
+      --txt:#f2f2f2; --muted:rgba(255,255,255,.65);
+      --hot:#ff2b2b; --cyan:#7ef6ff; --gold:#ffd36a;
+      --r12:12px; --r16:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; color:var(--txt);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      background:
+        radial-gradient(900px 500px at 20% 10%, rgba(126,246,255,.08), transparent 60%),
+        radial-gradient(700px 500px at 80% 0%, rgba(255,211,106,.06), transparent 65%),
+        linear-gradient(180deg, #07070a, var(--bg));
+      letter-spacing:.2px;
+    }
+    .wrap{max-width:1080px;margin:0 auto;padding:20px}
+    .btn{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:var(--txt);
+      padding:6px 10px;border-radius:999px;
+      font-weight:800;cursor:pointer;
+    }
+    .btn:hover{background:rgba(255,255,255,.10)}
+    .xbtn{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.22);
+      color:rgba(255,255,255,.75);
+      padding:2px 8px;border-radius:10px;
+      font-weight:900;cursor:pointer;
+    }
+
+    /* Topbar */
+    .topbar{
+      position:sticky;top:0;z-index:10;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:rgba(10,10,14,.82);backdrop-filter:blur(8px);
+    }
+    .topbar-inner{
+      max-width:1080px;margin:0 auto;
+      padding:10px 20px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      font-size:12px;
+    }
+    .pill{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+    }
+
+    /* Alerts */
+    .alerts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+    .alert{
+      border:1px solid var(--line);
+      border-radius:var(--r16);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      padding:12px; position:relative; overflow:hidden;
+    }
+    .alert::before{
+      content:"";position:absolute;inset:-1px;
+      background:radial-gradient(400px 120px at 20% 0%, rgba(255,43,43,.14), transparent 60%);
+      opacity:.7;pointer-events:none;
+    }
+    .kicker{
+      position:relative;z-index:1;
+      display:flex;align-items:center;justify-content:space-between;
+      font-weight:1000;letter-spacing:1px;text-transform:uppercase;color:var(--hot);
+      margin-bottom:8px;
+    }
+    .alert h4{position:relative;z-index:1;margin:0 0 6px;font-size:14px;font-weight:1000}
+    .alert p{position:relative;z-index:1;margin:0;color:var(--muted);font-size:12px;line-height:1.35}
+
+    /* Ticker */
+    .ticker{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      border-radius:var(--r16);
+      overflow:hidden;
+      padding:10px 0;margin:10px 0 20px;
+    }
+    .move{
+      white-space:nowrap;display:inline-block;padding-left:100%;
+      animation:marq 18s linear infinite;
+      font-size:12px;letter-spacing:.6px;color:rgba(255,255,255,.85);
+    }
+    @keyframes marq{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+
+    /* Main grid */
+    .grid{display:grid;grid-template-columns:1.4fr .6fr;gap:14px;align-items:start}
+    .headline{margin:0 0 10px;font-size:12px;letter-spacing:1.8px;color:rgba(255,255,255,.8);text-transform:uppercase}
+    .h1{margin:0 0 14px;font-size:28px;letter-spacing:1px;font-weight:1000}
+
+    /* Cards */
+    .chars{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .card{
+      border:1px solid var(--line);
+      background:var(--panel);
+      border-radius:var(--r16);overflow:hidden;
+    }
+    .ph-img{
+      aspect-ratio:4/5;
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg, rgba(126,246,255,.10), rgba(255,43,43,.08)), rgba(0,0,0,.20);
+      border-bottom:1px solid var(--line);
+      color:rgba(255,255,255,.7);font-weight:900;
+    }
+    .card .body{padding:10px 12px 12px}
+    .card .role{margin:0 0 6px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,.85);font-weight:1000}
+    .card .name{margin:0 0 8px;font-size:18px;font-weight:1000;letter-spacing:1px}
+    .card .tags{font-size:12px;color:var(--muted)}
+
+    .cta{
+      margin:12px 0 0;display:inline-flex;gap:10px;align-items:center;
+      padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);font-weight:1000;letter-spacing:.8px;
+    }
+
+    /* Side */
+    .side{
+      position:sticky;top:70px;
+      border:1px solid var(--line);
+      background:var(--panel);
+      border-radius:var(--r16);
+      overflow:hidden;
+    }
+    .side .hd{
+      padding:10px 12px;border-bottom:1px solid var(--line);
+      display:flex;align-items:center;justify-content:space-between;font-weight:1000;
+      letter-spacing:1px;text-transform:uppercase;
+    }
+    .side .bd{padding:12px}
+    .kv{display:grid;gap:8px;color:var(--muted);font-size:12px}
+    .kv b{color:rgba(255,255,255,.9)}
+    .enc{
+      margin-top:12px;padding:10px 12px;border-radius:12px;
+      border:1px dashed rgba(255,255,255,.18);
+      background:rgba(0,0,0,.18);
+      cursor:pointer;user-select:none;
+      font-weight:1000;letter-spacing:.6px;text-align:center;
+      color:rgba(255,255,255,.85);
+    }
+    .enc.on{border-style:solid;color:#0b0b0e;background:linear-gradient(135deg,var(--cyan),var(--gold))}
+    .enc-result{
+      margin-top:10px;padding:10px 12px;border-radius:12px;
+      border:1px solid var(--line);background:rgba(255,255,255,.03);
+      display:none;text-align:center;font-weight:1000;
+    }
+    .enc-result.show{display:block}
+
+    /* Academic portal */
+    .section{
+      margin-top:14px;border:1px solid var(--line);background:var(--panel);
+      border-radius:var(--r16);overflow:hidden;
+    }
+    .section .shd{
+      padding:10px 12px;border-bottom:1px solid var(--line);
+      display:flex;align-items:center;justify-content:space-between;
+      font-weight:1000;letter-spacing:1px;text-transform:uppercase;
+    }
+    .section .sbd{padding:12px}
+    .map{
+      border:1px solid var(--line);
+      border-radius:12px;overflow:hidden;background:rgba(0,0,0,.2);margin-bottom:10px;
+      aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);font-weight:1000;
+    }
+    .back{
+      display:inline-flex;padding:8px 10px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);
+      font-weight:1000;letter-spacing:.6px;margin-bottom:10px;
+    }
+    .notice h4{margin:10px 0 10px;font-weight:1000;letter-spacing:.8px}
+    .notice ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+    .notice li{
+      padding:10px;border-radius:12px;border:1px solid var(--line);
+      background:rgba(0,0,0,.16);font-size:12px;line-height:1.35;
+      color:rgba(255,255,255,.86);
+    }
+    .date{color:var(--muted);font-weight:800;margin-left:8px}
+
+    @media (max-width:920px){
+      .alerts{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+      .chars{grid-template-columns:1fr}
+      .side{position:relative;top:auto}
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar" id="top">
+    <div class="topbar-inner">
+      <div class="pill">
+        <span>NOW PLAYING: <b>TRACK_NAME.MP3</b></span>
+        <button class="btn" id="playBtn" type="button">PLAY</button>
+      </div>
+      <div class="pill" style="color:rgba(255,255,255,.8)">PORTAL ACCESS</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="alerts" id="alerts">
+      <div class="alert">
+        <div class="kicker"><span>URGENT</span><button class="xbtn" data-close>✕</button></div>
+        <h4>알림 카드 제목</h4>
+        <p>짧은 설명 텍스트</p>
+      </div>
+      <div class="alert">
+        <div class="kicker"><span>ALERT</span><button class="xbtn" data-close>✕</button></div>
+        <h4>알림 카드 제목</h4>
+        <p>짧은 설명 텍스트</p>
+      </div>
+      <div class="alert">
+        <div class="kicker"><span>HOT</span><button class="xbtn" data-close>✕</button></div>
+        <h4>알림 카드 제목</h4>
+        <p>짧은 설명 텍스트</p>
+      </div>
+    </div>
+
+    <div class="ticker"><div class="move">● GOSSIP: 텍스트가 계속 흐릅니다 ● ● GOSSIP: 또 다른 문장 ● ● BREAKING: 짧은 속보 ●</div></div>
+
+    <div class="grid">
+      <main>
+        <p class="headline">YOU KNOW YOU LOVE ME.</p>
+        <h1 class="h1">PORTAL TITLE</h1>
+
+        <div class="chars">
+          <article class="card">
+            <div class="ph-img">[ IMAGE ]</div>
+            <div class="body">
+              <p class="role">ROLE</p>
+              <p class="name">NAME</p>
+              <div class="tags">#tag #tag #tag</div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="ph-img">[ IMAGE ]</div>
+            <div class="body">
+              <p class="role">ROLE</p>
+              <p class="name">NAME</p>
+              <div class="tags">#tag #tag #tag</div>
+            </div>
+          </article>
+          <article class="card">
+            <div class="ph-img">[ IMAGE ]</div>
+            <div class="body">
+              <p class="role">ROLE</p>
+              <p class="name">NAME</p>
+              <div class="tags">#tag #tag #tag</div>
+            </div>
+          </article>
+        </div>
+
+        <a class="cta" href="#" onclick="return false;">CTA LINK → <span style="color:var(--muted)">example.com</span></a>
+
+        <section class="section" id="academic">
+          <div class="shd">
+            <span>Academic Portal</span>
+            <button class="xbtn" id="academicClose">✕</button>
+          </div>
+          <div class="sbd">
+            <div class="map">[ CAMPUS MAP ]</div>
+            <a class="back" href="#top">RETURN TO BOARD</a>
+
+            <div class="notice">
+              <h4>공지사항 (Notice)</h4>
+              <ul>
+                <li>공지 항목 1 <span class="date">2026.02.13</span></li>
+                <li>공지 항목 2 <span class="date">2026.02.12</span></li>
+                <li>공지 항목 3 <span class="date">2026.02.11</span></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="side">
+        <div class="hd"><span>Profile</span><span style="color:var(--muted)">#</span></div>
+        <div class="bd">
+          <div class="kv">
+            <div><b>AGE:</b> 00</div>
+            <div><b>HEIGHT:</b> 000cm</div>
+            <div><b>REP:</b> CATEGORY</div>
+          </div>
+
+          <div id="enc" class="enc">ENCRYPTED: CLICK TO DECODE</div>
+          <div id="encResult" class="enc-result">DECODED</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <audio id="bgm" preload="none"></audio>
+
+  <script>
+    // alert close
+    document.querySelectorAll("[data-close]").forEach(btn=>{
+      btn.addEventListener("click", ()=> btn.closest(".alert")?.remove());
+    });
+
+    // academic close
+    document.getElementById("academicClose").addEventListener("click", ()=>{
+      document.getElementById("academic").style.display = "none";
+    });
+
+    // encrypted toggle
+    const enc = document.getElementById("enc");
+    const encResult = document.getElementById("encResult");
+    enc.addEventListener("click", ()=>{
+      const on = enc.classList.toggle("on");
+      encResult.classList.toggle("show", on);
+      enc.textContent = on ? "DECODED" : "ENCRYPTED: CLICK TO DECODE";
+    });
+
+    // audio play/pause (파일 연결하면 작동)
+    const bgm = document.getElementById("bgm");
+    const playBtn = document.getElementById("playBtn");
+    let playing = false;
+    playBtn.addEventListener("click", async ()=>{
+      try{
+        if(!playing){ await bgm.play(); playing = true; playBtn.textContent="PAUSE"; }
+        else{ bgm.pause(); playing = false; playBtn.textContent="PLAY"; }
+      }catch(e){
+        alert("오디오 소스가 없거나 브라우저 정책으로 재생이 제한될 수 있어요.");
+      }
+    });
+  </script>
+</body>
+</html>
